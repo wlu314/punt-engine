@@ -90,13 +90,13 @@ library
 
 -- Builds the executable 'clash', with punt-engine project in scope
 executable clash
-  main-is: bin/Clash.hs
+  main-is: exe/Clash.hs
   default-language: Haskell2010
   Build-Depends: base, clash-ghc, punt-engine
 
 -- Builds the executable 'clashi', with punt-engine project in scope
 executable clashi
-  main-is: bin/Clashi.hs
+  main-is: exe/Clashi.hs
   default-language: Haskell2010
   build-depends: base, clash-ghc, punt-engine
 
