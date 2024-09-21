@@ -1,6 +1,5 @@
 dist
 vhdl
-bin
 result
 dist-*
 cabal-dev
