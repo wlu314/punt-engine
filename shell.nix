@@ -1,9 +1,14 @@
-{ pkgs ? import <nixpkgs> { overlays = [ (import ./overlay.nix ) ]; } }:
+{ nixpkgs ? import ./nix/nixpkgs.nix {} }:
+let
+  inherit (nixpkgs) pkgs;
+  inherit (pkgs) haskellPackages;
 
-pkgs.mkShell {
-  buildInputs = [
-    pkgs.haskellPackages.ghc
-    pkgs.haskellPackages.clash-ghc
-    pkgs.haskellPackages.cabal-install
+  project = import ./release.nix;
+in
+pkgs.stdenv.mkDerivation {
+  name = "shell";
+  buildInputs = project.env.nativeBuildInputs ++ [
+    haskellPackages.cabal-install
   ];
+  LC_ALL = "C.UTF-8";
 }
