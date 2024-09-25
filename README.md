@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # punt-engine: high-freq trading on FPGAs via Haskell
 
-At a high level, this project uses Clash (a semantic subset of Haskell) as a hardware description language to develop a high-frequency trading engine for FPGAs. 
+This project uses Clash (a semantic subset of Haskell) as a hardware description language to develop a high-frequency trading engine for FPGAs. 
 
 <!-- omit in toc -->
 # Table of Contents
