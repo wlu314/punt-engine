@@ -47,6 +47,7 @@ data ErrorState
   | InvalidValue
   | ChecksumMismatch
   | UnexpectedByte
+  | MalformedMessage
   deriving (Generic, NFDataX, Show)
 
 data ParserOutput
@@ -75,16 +76,10 @@ data MessageData = MessageData
   }
   deriving (Generic, NFDataX, Show)
 
-type InputStream = Signal System Byte
-
-type OutputStream = Signal System (Maybe ParserOutput)
-
-parser :: (HiddenClockResetEnable dom) => InputStream -> OutputStream
+parser :: (HiddenClockResetEnable dom) => Signal dom Byte -> Signal dom (Maybe ParserOutput)
 parser input = mealy parserT initialState input
   where
     initialState = (WaitingForStart, initialParserState)
-
-type ParserInternalState = (ParserState, ParserData)
 
 data ParserData = ParserData
   { currentTag :: Tag,
@@ -154,7 +149,9 @@ parserT (state, pdata@ParserData {..}) byte = case state of
                   valueIndex = 0
                 }
             nextState =
-              if currentTag == 10 -- check if tag is checksum
+              -- all messages have the standard trailer, ascii 10 (1).
+              -- 1: https://www.onechronos.com/docs/fix/fix-42/#standard-trailer
+              if currentTag == 10
                 then ValidatingChecksum
                 else ReadingTag
          in ((nextState, pdata'), Nothing)
@@ -175,6 +172,7 @@ parserT (state, pdata@ParserData {..}) byte = case state of
           else
             -- error: value too long
             ((ErrorState, pdata), Just (ParserError InvalidValue))
+  -- validate checksum per https://www.onechronos.com/docs/fix/primer/#checksum-calculation
   ValidatingChecksum ->
     -- parse checksum value (assumed to be last)
     let receivedChecksum = parseChecksum currentValue valueIndex
@@ -200,3 +198,30 @@ parserT (state, pdata@ParserData {..}) byte = case state of
   ErrorState ->
     -- stay in ErrorState until reset (auto-recovery later)
     ((ErrorState, pdata), Nothing)
+
+asciiOf :: Char -> Byte
+asciiOf c = fromIntegral (ord c)
+
+asciiSOH :: Byte
+asciiSOH = 0x01 -- unprintable Start of Heading char
+
+isDigitByte :: Byte -> Bool
+isDigitByte byte = byte >= asciiOf '0' && byte <= asciiOf '9'
+
+parseChecksum :: Vec MaxValueLength Byte -> Index MaxValueLength -> Unsigned 8
+parseChecksum valueBytes valueLen =
+  let digits = map (\b -> b - asciiOf '0') (take valueLen valueBytes)
+      checksum = foldl (\acc d -> acc * 10 + d) 0 digits
+   in checksum
+
+initialParserData :: ParserData
+initialParserData =
+  ParserData
+    { currentTag = 0,
+      currentValue = repeat 0,
+      valueIndex = 0,
+      tagsAccum = repeat (0, Value (repeat 0)),
+      tagIndex = 0,
+      checksum = 0,
+      calcChecksum = 0
+    }
