@@ -1,6 +1,6 @@
 <!-- omit in toc -->
-# 📉 Punt Engine
-Punt Engine is a hardware high frequency trading engine synthesized from Haskell and maintained by Trading @ Georgia Tech.
+# 📉 punt-engine
+punt-engine is a hardware high frequency trading engine synthesized from Haskell and maintained by Trading @ Georgia Tech.
 
 ## Development
 
