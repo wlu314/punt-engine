@@ -28,3 +28,7 @@ You can find the HDL files in `vhdl/`. The source can be found in `src/Example/P
 Clash includes a repl much like Haskell's `ghci`. Run it with `cabal run clashi`.
 
 Add custom dependencies or update nix using [niv](https://hackage.haskell.org/package/niv).
+
+## Engine Overview
+
+![image](https://github.com/user-attachments/assets/8843f0a0-133e-45b3-8e5a-6cc585350a30)
