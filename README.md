@@ -1,30 +1,3 @@
-<!-- omit in toc -->
-# 📉 punt-engine
-punt-engine is a hardware high frequency trading engine synthesized from Haskell and maintained by Trading @ Georgia Tech.
+# punt-engine
 
-## Development
-
-### Building and testing
-
-Dependencies are managed by Nix. Download it and run `nix-shell` enter an environment and install them.
-
-In the shell, build with `nix-build`. The first build will take a while.
-
-This project also defines unit and doc tests in `tests/`. Run them with:
-
-```bash
-cabal run test-library
-cabal run doctests
-```
-
-To compile a project to VHDL run:
-
-```bash
-cabal run clash -- <Project>.Project --vhdl
-```
-
-You can find the HDL files in `vhdl/`. The source can be found in `src/Example/Project.hs`.
-
-Clash includes a repl much like Haskell's `ghci`. Run it with `cabal run clashi`.
-
-Add custom dependencies or update nix using [niv](https://hackage.haskell.org/package/niv).
+![image](https://github.com/user-attachments/assets/06215e11-866b-47b0-9b47-d901cfb66c06)
