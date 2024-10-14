@@ -1,12 +1,12 @@
 cradle:
   cabal:
     - path: "./src"
-      component: "lib:simple"
+      component: "lib:fix-parser"
     - path: "./tests/doctests.hs"
-      component: "simple:doctests"
+      component: "fix-parser:doctests"
     - path: "./tests"
-      component: "simple:test-library"
+      component: "fix-parser:test-library"
     - path: "./bin/Clashi.hs"
-      component: "simple:exe:clashi"
+      component: "fix-parser:exe:clashi"
     - path: "./bin/Clash.hs"
-      component: "simple:exe:clash"
+      component: "fix-parser:exe:clash"

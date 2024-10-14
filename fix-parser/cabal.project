@@ -1,5 +1,5 @@
 packages:
-  simple.cabal
+  fix-parser.cabal
 
 write-ghc-environment-files: always
 

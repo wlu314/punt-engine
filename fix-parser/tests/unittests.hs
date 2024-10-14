@@ -1,10 +1,11 @@
+import Test.Tasty
+import qualified Tests.FixParser
 import Prelude
 
-import Test.Tasty
-
-import qualified Tests.Example.Project
-
 main :: IO ()
-main = defaultMain $ testGroup "."
-  [ Tests.Example.Project.accumTests
-  ]
+main =
+  defaultMain $
+    testGroup
+      "."
+      [ Tests.FixParser.tests
+      ]

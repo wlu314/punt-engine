@@ -31,7 +31,7 @@ cabal run doctests
 To compile the project to VHDL, run:
 
 ```bash
-cabal run clash -- Example.Project --vhdl
+cabal run clash -- FixParser --vhdl
 ```
 
 You can find the HDL files in `vhdl/`. The source can be found in `src/Example/Project.hs`.
