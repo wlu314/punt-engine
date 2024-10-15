@@ -43,44 +43,37 @@ pub const Pattern = packed struct {
     isBuyOrder: OrderType, // otherwise, is Sell
     quantity: u16,
 
-    pub fn new(isBuyOrder: OrderType, quantity: u16, limitPrice: u16) !Pattern {
-        if (quantity > 65535) {
-            return PatternError.QuantityTooLarge;
-        }
-        if (limitPrice > 32767) {
-            return PatternError.PriceTooLarge;
-        }
-
+    pub fn new(isBuyOrder: OrderType, limitPrice: u15, quantity: u16) !Pattern {
         return Pattern{
-            .limitPrice = @intCast(u15, limitPrice),
+            .limitPrice = @intCast(limitPrice),
             .isBuyOrder = isBuyOrder,
-            .quantity = @intCast(u16, quantity),
+            .quantity = @intCast(quantity),
         };
     }
 
     pub fn new_unchecked_cast(comptime limitPrice: comptime_int, orderType: OrderType, quantity: comptime_int) !*const Pattern {
         return Pattern{
             .limitPrice = @intCast(limitPrice),
-            .orderType= orderType,
+            .orderType = orderType,
             .quantity = @intCast(quantity),
         };
     }
 
-    pub fn getOrderType(self: Self) OrderType {
+    pub fn getOrderType(self: Pattern) OrderType {
         return self.isBuyOrder;
     }
 
-    pub fn getQuantity(self: Self) u16 {
+    pub fn getQuantity(self: Pattern) u16 {
         return self.quantity;
     }
 
-    pub fn getLimitPrice(self: Self) u16 {
-        return @intCast(u16, self.limitPrice);
+    pub fn getLimitPrice(self: Pattern) u16 {
+        return @intCast(self.limitPrice);
     }
 
     /// serialize into a 4-byte array
-    pub fn toBytes(self: Self) [4]u8 {
-        return @bitCast([4]u8, self);
+    pub fn toBytes(self: Pattern) [4]u8 {
+        return @bitCast(self);
     }
 
     /// deserialize 4-byte array into a Pattern instance
@@ -89,9 +82,17 @@ pub const Pattern = packed struct {
             return PatternError.BufferTooSmall;
         }
 
-        const pattern = @bitCast(Pattern, bytes[0..4]);
-        
-        // validate enum
+        const received_bytes: [4]u8 = .{
+            bytes[0],
+            bytes[1],
+            bytes[2],
+            bytes[3],
+        };
+
+        const u32_val: u32 = @bitCast(received_bytes);
+        const pattern: Pattern = @bitCast(u32_val);
+
+        // Validate enum
         if (pattern.isBuyOrder != OrderType.Sell and pattern.isBuyOrder != OrderType.Buy) {
             return PatternError.InvalidOrderType;
         }

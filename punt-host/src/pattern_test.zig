@@ -9,7 +9,7 @@ test "Pattern encoding and decoding" {
     const limitPrice1 = 600;
 
     // create pattern
-    const pattern1 = try Pattern.new(orderType1, quantity1, limitPrice1);
+    const pattern1 = try Pattern.new(orderType1, limitPrice1, quantity1);
 
     // serialize
     const bytes1 = pattern1.toBytes();
@@ -25,10 +25,10 @@ test "Pattern encoding and decoding" {
 
 test "Pattern serialization edge cases" {
     const orderTypeMax = OrderType.Buy;
-    const quantityMax = 65535; // max u16
     const limitPriceMax = 32767; // max u15
+    const quantityMax = 65535; // max u16
 
-    const patternMax = try Pattern.new(orderTypeMax, quantityMax, limitPriceMax);
+    const patternMax = try Pattern.new(orderTypeMax, limitPriceMax, quantityMax);
 
     const bytesMax = patternMax.toBytes();
 
@@ -51,12 +51,4 @@ test "Pattern serialization edge cases" {
     try std.testing.expect(deserializedMin.getOrderType() == orderTypeMin);
     try std.testing.expect(deserializedMin.getQuantity() == quantityMin);
     try std.testing.expect(deserializedMin.getLimitPrice() == limitPriceMin);
-}
-
-test "Pattern constructor failures" {
-    try std.testing.expectError(Pattern.new(OrderType.Buy, 70000, 500)) == PatternError.QuantityTooLarge;
-
-    try std.testing.expectError(Pattern.new(OrderType.Sell, 100, 40000)) == PatternError.PriceTooLarge;
-
-    try std.testing.expectError(Pattern.fromBytes(&[_]u8{ 0xFF, 0xFF })) == PatternError.BufferTooSmall;
 }

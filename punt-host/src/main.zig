@@ -2,23 +2,23 @@ const std = @import("std");
 const Pattern = @import("pattern.zig").Pattern;
 const OrderType = @import("pattern.zig").OrderType;
 const PatternError = @import("pattern.zig").PatternError;
-const dma = @import("dma.zig").sendDMA;
+const sendDMA = @import("dma.zig").sendDMA;
 const DMAError = @import("dma.zig").DmaError;
 
 pub fn main() !void {
     var allocator = std.heap.page_allocator;
     const device_path = "/dev/xdma0_h2c_0"; // host-to-card dma channel
 
-    const file = try std.fs.cwd().openFile(device_path, .{ .read = true, .write = true });
+    const file = try std.fs.cwd().openFile(device_path, .{});
     defer file.close();
 
     const num_patterns = 2;
- 
+
     var patterns = try allocator.alloc(Pattern, num_patterns);
     defer allocator.free(patterns);
-    
-    try patterns[0] = Pattern.new(OrderType.Buy, 1, 1_100);
-    try patterns[1] = Pattern.new(OrderType.Sell, 1, 1_200);
+
+    patterns[0] = try Pattern.new(OrderType.Buy, 1, 1_100);
+    patterns[1] = try Pattern.new(OrderType.Sell, 1, 1_200);
 
     const bytes_per_pattern = 4; // 32 bits = 4 bytes
     const total_bytes = num_patterns * bytes_per_pattern;
@@ -27,21 +27,21 @@ pub fn main() !void {
     defer allocator.free(serialized_buffer);
 
     // serialize each Pattern into the buffer
-    for (patterns) |pattern, idx| {
+    for (patterns, 0..) |pattern, i| {
         const bytes = pattern.toBytes();
-        std.mem.copy(u8, serialized_buffer[idx * bytes_per_pattern .. (idx + 1) * bytes_per_pattern], bytes[0..4]);
+        @memcpy(serialized_buffer[i * bytes_per_pattern .. (i + 1) * bytes_per_pattern], bytes[0..4]);
     }
 
     // allocate DMA buffer with proper alignment
     const buffer_align = 8; // 8-byte alignment for DMA
-    var dma_buffer = try allocator.alignedAlloc(u8, buffer_align, total_bytes);
+    const dma_buffer = try allocator.alignedAlloc(u8, buffer_align, total_bytes);
     defer allocator.alignedFree(dma_buffer);
 
     // copy serialized data into DMA buffer
-    std.mem.copy(u8, dma_buffer, serialized_buffer);
+    @memcpy(dma_buffer, serialized_buffer);
 
     // make DMA transfer using ioctl
-    try sendDMA(file.fd, dma_buffer) catch |err| {
+    try sendDMA(file, dma_buffer) catch |err| {
         std.debug.print("DMA transfer failed: {}\n", .{err});
         return;
     };

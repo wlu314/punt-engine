@@ -47,7 +47,7 @@ pub const os = std.Target.Os{
             .minor = 19,
             .patch = 0,
         },
-    }},
+    } },
 };
 pub const target = std.Target{
     .cpu = cpu,
