@@ -27,7 +27,9 @@ jobs:
 
       # Build the project
       - name: Build project
-        run: zig build
+        run: |
+          cd host-dmalib
+          zig build
 
       # Run tests
       - name: Run tests
