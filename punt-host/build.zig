@@ -1,10 +1,30 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    const exe = b.addExecutable(.{
-        .name = "punt-host",
-        .root_source_file = b.path("src/main.zig"),
-        .target = b.host,
+    const lib = b.addStaticLibrary(.{
+        .name = "z",
+        .target = b.standardTargetOptions(.{}),
+        .optimize = b.standardOptimizeOption(.{}),
     });
-    b.installArtifact(exe);
+    lib.linkLibC();
+    lib.addCSourceFiles(.{
+        .root = b.path("src/"),
+        .files = &.{
+            "dma.c",
+            "log.c",
+        },
+        .flags = &.{
+            "-O3",
+            "-Wall",
+            "-Wextra",
+            "-std=c11",
+        },
+    });
+    lib.installHeadersDirectory(b.path("./include"), "", .{
+        .include_extensions = &.{
+            "log.h",
+            "pattern.h",
+        },
+    });
+    b.installArtifact(lib);
 }
