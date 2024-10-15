@@ -26,11 +26,8 @@ jobs:
         run: zig version
 
       # Build the project
-      - name: Build project
+      - name: Build project and run
         run: |
           cd host-dmalib
           zig build
-
-      # Run tests
-      - name: Run tests
-        run: ./zig-out/bin/test-dmalib
+          ./zig-out/bin/test-dmalib
