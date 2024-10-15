@@ -17,13 +17,9 @@ jobs:
 
       # Install Zig (version 0.13)
       - name: Install Zig
-        uses: actions/setup-zig@v1
+        uses: mlugg/setup-zig@v1
         with:
           zig-version: '0.13.0'  # Specify the exact version you are using
-
-      # Add Zig to PATH
-      - name: Add Zig to PATH
-        run: echo "${{ github.workspace }}/zig/bin" >> $GITHUB_PATH
 
       # Verify Zig installation
       - name: Verify Zig
