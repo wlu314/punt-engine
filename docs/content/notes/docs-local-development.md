@@ -29,7 +29,7 @@ npm i \
 npx quartz build --serve
 ```
 
-You should have output in console directing you to (http://localhost:8080)[http://localhost:8080]. Open it in a browser and you'll see the `/docs` site running locally.
+You should have output in console directing you to [http://localhost:8080|http://localhost:8080]. Open it in a browser and you'll see the `/docs` site running locally.
 
 ## Writing a note
 
