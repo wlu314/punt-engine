@@ -1,5 +1,5 @@
 cabal-version:       2.4
-name:                punt-engine-accumulators
+name:                accumulators
 version:             0.1
 license:             MIT
 author:              Race Williams <race@raquent.in>
@@ -124,7 +124,8 @@ test-suite test-library
   ghc-options: -threaded
   main-is: unittests.hs
   other-modules:
-    Tests.
+    Tests.FastMovingAverage
+    Tests.SlowMovingAverage
   build-depends:
     simple,
     QuickCheck,
