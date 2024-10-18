@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "punt-engine",
+    pageTitle: "Punt Engine",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
