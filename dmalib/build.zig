@@ -33,13 +33,13 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(lib);
 
     // test exe
-    const test_dmalib = b.addExecutable(.{
-        .name = "test-dmalib",
+    const dmalib = b.addExecutable(.{
+        .name = "dmalib",
         .target = target,
         .optimize = optimize,
     });
 
-    test_dmalib.addCSourceFiles(.{
+    dmalib.addCSourceFiles(.{
         .root = b.path("tests/"),
         .files = &.{
             "test_pattern.c",
@@ -52,12 +52,12 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    test_dmalib.addIncludePath(b.path("./include"));
+    dmalib.addIncludePath(b.path("./include"));
 
-    test_dmalib.linkLibrary(lib);
+    dmalib.linkLibrary(lib);
 
-    test_dmalib.linkLibC();
+    dmalib.linkLibC();
 
-    b.installArtifact(test_dmalib);
-    b.installArtifact(test_dmalib);
+    b.installArtifact(dmalib);
+    b.installArtifact(dmalib);
 }

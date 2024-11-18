@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  dmalib-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +28,6 @@ jobs:
       # Build the project
       - name: Build project and run
         run: |
-          cd host-dmalib
+          cd dmalib
           zig build
-          ./zig-out/bin/test-dmalib
+          ./zig-out/bin/dmalib
