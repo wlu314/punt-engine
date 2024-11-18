@@ -4,4 +4,5 @@ import System.Environment (getArgs)
 import Test.DocTest (mainFromCabal)
 
 main :: IO ()
-main = mainFromCabal "fix-parser" =<< getArgs
+main = mainFromCabal "punt-engine-haskell-cores" =<< getArgs
+

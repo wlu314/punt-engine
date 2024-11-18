@@ -1,5 +1,5 @@
 cabal-version:       2.4
-name:                accumulators
+name:                punt-engine-haskell-cores
 version:             0.1
 license:             MIT
 author:              Race Williams <race@raquent.in>
@@ -85,25 +85,25 @@ library
   import: common-options
   hs-source-dirs: src
   exposed-modules:
-    FastMovingAverage
-    SlowMovingAverage
+    FixParser.Top
+    Example.Project
   default-language: Haskell2010
 
--- Builds the executable 'clash', with simple project in scope
+-- Builds the executable 'clash', with punt-engine-haskell-cores project in scope
 executable clash
   main-is: bin/Clash.hs
   default-language: Haskell2010
-  Build-Depends: base, clash-ghc, accumulators
+  Build-Depends: base, clash-ghc, punt-engine-haskell-cores
   if !os(Windows)
     ghc-options: -dynamic
 
--- Builds the executable 'clashi', with simple project in scope
+-- Builds the executable 'clashi', with punt-engine-haskell-cores project in scope
 executable clashi
   main-is: bin/Clashi.hs
   default-language: Haskell2010
   if !os(Windows)
     ghc-options: -dynamic
-  build-depends: base, clash-ghc, accumulators
+  build-depends: base, clash-ghc, punt-engine-haskell-cores
 
 test-suite doctests
   type:             exitcode-stdio-1.0
@@ -113,7 +113,7 @@ test-suite doctests
   hs-source-dirs:   tests
   build-depends:
     base,
-    simple,
+    punt-engine-haskell-cores,
     doctest-parallel >= 0.2 && < 0.4,
 
 test-suite test-library
@@ -124,10 +124,9 @@ test-suite test-library
   ghc-options: -threaded
   main-is: unittests.hs
   other-modules:
-    Tests.FastMovingAverage
-    Tests.SlowMovingAverage
+    Tests.Example.Project
   build-depends:
-    simple,
+    punt-engine-haskell-cores,
     QuickCheck,
     clash-prelude-hedgehog,
     hedgehog,

@@ -73,5 +73,4 @@ We can run the tests using `cabal run test-library`:
     plusIsCommutative: OK
         ✓ plusIsCommutative passed 100 tests.
 
-All 1 tests passed (0.00s)
-```
+All 1 tests passed (0.00s)```

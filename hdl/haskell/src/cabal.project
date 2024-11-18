@@ -1,5 +1,5 @@
 packages:
-  accumulators.cabal
+  punt-engine-haskell-cores.cabal
 
 write-ghc-environment-files: always
 
